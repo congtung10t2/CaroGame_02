@@ -8,8 +8,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class gameView extends View {
+public class GameView extends View {
     Paint paint = new Paint();
+    CaroGame caroGame = null;
     public Canvas canvas;
     public static final int MAX_WIDTH = 10;
     public static final int MAX_HEIGHT = 10;
@@ -18,6 +19,8 @@ public class gameView extends View {
     private final float OFFSET_Y = 0.5f;
     private final float RADIUS = 20.0f;
     private final int WIN_TICK = 5;
+    public TickType[][] ticks = new TickType[MAX_WIDTH][MAX_HEIGHT];
+    private TickType currentTick = TickType.SQUARED;
 
     enum TickType {
         INVALID,
@@ -25,8 +28,20 @@ public class gameView extends View {
         SQUARED
     }
 
-    public TickType[][] ticks = new TickType[MAX_WIDTH][MAX_HEIGHT];
-    private TickType currentTick = TickType.SQUARED;
+    public GameView(Context context) {
+        super(context);
+        init();
+    }
+
+    public GameView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    private void init() {
+        paint.setColor(Color.BLACK);
+        resetGame();
+    }
 
     public void resetGame() {
         for (int i = 0; i < MAX_WIDTH; i++) {
@@ -37,28 +52,13 @@ public class gameView extends View {
         this.invalidate();
     }
 
-    public gameView(Context context) {
-        super(context);
-        init();
-    }
-
-    public gameView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    private void init() {
-        paint.setColor(Color.BLACK);
-        resetGame();
-    }
-
     float getDeltaX() {
         return canvas.getWidth() / (float) MAX_WIDTH;
     }
 
     float getDeltaY() {
         return (canvas.getWidth()) / (float) MAX_WIDTH;
-        //use same deltaX & deltaY for game board is squared. But still redefine to ez modify
+        //use same deltaX & deltaY TODO game board is squared. But still redefine to ez modify
     }
 
     int getIndexX(float x) {
@@ -85,16 +85,38 @@ public class gameView extends View {
         }
     }
 
+    public void setGameActivity(CaroGame caroGame) {
+        this.caroGame = caroGame;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        postInvalidate();
-        float touchX = event.getX();
-        float touchY = event.getY();
-        int indexX = getIndexX(touchX);
-        int indexY = getIndexY(touchY);
-        if (indexX < 0 || indexX > MAX_WIDTH) return false;
-        if (indexY < 0 || indexY > MAX_HEIGHT) return false;
-        ticks[indexX][indexY] = currentTick;
+        switch (event.getAction()) {
+            case (MotionEvent.ACTION_DOWN):
+                caroGame.hideProgressBar();
+                break;
+            case (MotionEvent.ACTION_UP): {
+                postInvalidate();
+                float touchX = event.getX();
+                float touchY = event.getY();
+                int indexX = getIndexX(touchX);
+                int indexY = getIndexY(touchY);
+                caroGame.showProgressBar();
+                if (indexX < 0 || indexX > MAX_WIDTH) return false;
+                if (indexY < 0 || indexY > MAX_HEIGHT) return false;
+                if (ticks[indexX][indexY] == TickType.INVALID) {
+                    ticks[indexX][indexY] = currentTick;
+                    if (currentTick == TickType.SQUARED) {
+                        caroGame.onEnemyTurn();
+                        currentTick = TickType.CIRCLE;
+                    } else {
+                        currentTick = TickType.SQUARED;
+                        caroGame.onPlayerTurn();
+                    }
+                }
+            }
+            break;
+        }
         return true;
     }
 
@@ -149,5 +171,6 @@ public class gameView extends View {
         this.canvas = canvas;
         drawBoard();
         updateTicks();
+        invalidate();
     }
 }

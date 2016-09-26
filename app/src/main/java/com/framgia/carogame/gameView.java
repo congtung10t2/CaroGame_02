@@ -17,6 +17,7 @@ public class gameView extends View {
     private final float OFFSET_X = 0.5f;
     private final float OFFSET_Y = 0.5f;
     private final float RADIUS = 20.0f;
+    private final int WIN_TICK = 5;
 
     enum TickType {
         INVALID,
@@ -91,12 +92,36 @@ public class gameView extends View {
         float touchY = event.getY();
         int indexX = getIndexX(touchX);
         int indexY = getIndexY(touchY);
-        if (indexX < 0 || indexX > MAX_WIDTH)
-            return false;
-        if (indexY < 0 || indexY > MAX_HEIGHT)
-            return false;
+        if (indexX < 0 || indexX > MAX_WIDTH) return false;
+        if (indexY < 0 || indexY > MAX_HEIGHT) return false;
         ticks[indexX][indexY] = currentTick;
         return true;
+    }
+
+    boolean isLimit(int indexX, int indexY) {
+        if (indexX < 0 || indexX > MAX_WIDTH - 1) return false;
+        if (indexY < 0 || indexY > MAX_HEIGHT - 1) return false;
+        return true;
+    }
+
+    int countOnDirection(int indexX, int indexY, TickType value, int stepX, int stepY) {
+        int sum = 0;
+        for (int k = 1; k < WIN_TICK; k++) {
+            if (isLimit(indexX + k * stepX, indexY + k * stepY)) return sum;
+            if (ticks[indexX + k * stepX][indexY + k * stepY] == value) sum++;
+            else return sum;
+        }
+        return sum;
+    }
+
+    boolean isWin(int indexX, int indexY, TickType value) {
+        if (countOnDirection(indexX, indexY, value, 0, 1) + countOnDirection(indexX, indexY,
+            value, 0, -1) == WIN_TICK - 1) return true;
+        if (countOnDirection(indexX, indexY, value, 1, 0) + countOnDirection(indexX, indexY,
+            value, -1, 0) == WIN_TICK - 1) return true;
+        if (countOnDirection(indexX, indexY, value, 1, 1) + countOnDirection(indexX, indexY,
+            value, -1, -1) == WIN_TICK - 1) return true;
+        return false;
     }
 
     void updateTicks() {

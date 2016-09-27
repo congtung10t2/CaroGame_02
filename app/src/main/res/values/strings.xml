@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">CaroGame</string>
-    <string name="playerName">Player</string>
-    <string name="enemyName">Enemy</string>
+    <string name="player_name">Player</string>
+    <string name="enemy_name">Enemy</string>
+    <string name="already_on">Already on</string>
+    <string name="turned_on">Turned on</string>
     <string name="vs">VS</string>
+    <string name="tag">CaroGameService</string>
+    <string name="caro_game_secure">CaroGameSecure</string>
+    <string name="caro_game_insecure">CaroGameInSecure</string>
+    <string name="my_uuid_secure">42a3ff9a-0583-4ca8-971c-b4dcc289fa34</string>
+    <string name="my_uuid_insecure">ed8758ce-579f-4dca-949b-deb61eb02df3</string>
 </resources>

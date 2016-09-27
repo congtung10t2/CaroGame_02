@@ -15,7 +15,7 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
     private GameView gameView;
     private PlayerInfo enemy;
     private PlayerInfo player;
-    public CaroActivityBinding binding;
+    private CaroActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +26,13 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
         binding.setPlayer(player);
         gameView = (GameView) findViewById(R.id.game_view);
         gameView.invalidate();
-        gameView.setGameActivity(this);
+        gameView.setGameContext(this);
         thinkingBar = (ProgressBar) findViewById(R.id.thinking_bar);
     }
 
     public void initGame() {
-        enemy = new PlayerInfo("Enemy", 0);
-        player = new PlayerInfo("Player", 0);
+        enemy = new PlayerInfo(getResources().getString(R.string.enemy_name), 0);
+        player = new PlayerInfo(getResources().getString(R.string.player_name), 0);
     }
 
     public void onPlayerTurn() {

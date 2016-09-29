@@ -8,4 +8,5 @@ public class GameDef {
     public static final int MAX_WIDTH = 10;
     public static final int MAX_HEIGHT = 10;
     public static final int WIN_TICK = 5;
+    public static final int FLOAT_TO_PERCENT = 100;
 }

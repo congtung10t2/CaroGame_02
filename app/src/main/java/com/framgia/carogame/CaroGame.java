@@ -38,15 +38,13 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
     public void onPlayerTurn() {
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) thinkingBar.getLayoutParams();
         params.gravity = Gravity.LEFT | Gravity.TOP;
-        params.leftMargin =
-            (int) getResources().getDimension(R.dimen.thinking_bar_horizontal_margin);
+        params.leftMargin = getResources().getDimensionPixelSize(R.dimen.thinking_bar_horizontal_margin);
     }
 
     public void onEnemyTurn() {
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) thinkingBar.getLayoutParams();
         params.gravity = Gravity.RIGHT | Gravity.TOP;
-        params.rightMargin =
-            (int) getResources().getDimension(R.dimen.thinking_bar_horizontal_margin);
+        params.rightMargin = getResources().getDimensionPixelSize(R.dimen.thinking_bar_horizontal_margin);
     }
 
     public void onWin() {

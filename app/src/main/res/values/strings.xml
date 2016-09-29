@@ -10,4 +10,14 @@
     <string name="caro_game_insecure">CaroGameInSecure</string>
     <string name="my_uuid_secure">42a3ff9a-0583-4ca8-971c-b4dcc289fa34</string>
     <string name="my_uuid_insecure">ed8758ce-579f-4dca-949b-deb61eb02df3</string>
+    <string name="bluetooth_state">Bluetooth</string>
+    <string name="find_devices">Find devices</string>
+    <string name="create_game">Create Game</string>
+    <string name="device">Device</string>
+    <string name="address">Address</string>
+    <string name="dissmiss">DISMISS</string>
+    <string name="win">Win</string>
+    <string name="lost">Lost</string>
+    <string name="rate">Rate</string>
+    <string name="streak">Streak</string>
 </resources>

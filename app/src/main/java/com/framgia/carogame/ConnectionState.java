@@ -7,11 +7,26 @@ public class ConnectionState {
     private static ConnectionState instance = new ConnectionState();
     private State currentState = State.STATE_NONE;
     private StateListener stateListener;
+
     public enum State {
-        STATE_NONE, // we're doing nothing
-        STATE_LISTEN, // now listening for incoming connections
-        STATE_CONNECTING, // now initiating an outgoing connections
-        STATE_CONNECTED; // now connected to a remote device
+        STATE_INVALID(-1),
+        STATE_NONE(0), // we're doing nothing
+        STATE_LISTEN(1), // now listening for incoming connections
+        STATE_CONNECTING(2), // now initiating an outgoing connections
+        STATE_CONNECTED(3); // now connected to a remote device
+
+        private int value;
+        State(int id) {
+            value = id;
+        }
+        public static State getState(int id) {
+            if(id > STATE_CONNECTED.value || id < STATE_NONE.value) return STATE_INVALID;
+            return values()[id];
+        }
+        public static int toInt(State state){
+            return state.value;
+        }
+
     }
 
     private ConnectionState() {

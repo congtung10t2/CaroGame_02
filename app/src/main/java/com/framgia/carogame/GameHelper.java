@@ -18,4 +18,10 @@ public class GameHelper {
         char first = s.charAt(0);
         return Character.isUpperCase(first) ? s : (Character.toUpperCase(first) + s.substring(1));
     }
+
+    public static void stopThread(ThreadCancel thread) {
+        if(thread == null) return;
+        thread.cancel();
+    }
+    
 }

@@ -3,9 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" >
     <data>
         <variable
-            name="player" type="com.framgia.carogame.PlayerInfo"/>
-        <variable
-            name="enemy" type="com.framgia.carogame.PlayerInfo"/>
+            name="players" type="com.framgia.carogame.viewmodel.PlayerInfoViewModel"/>
     </data>
 <FrameLayout
     style="@style/MatchParrentStyle"
@@ -14,7 +12,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-    <com.framgia.carogame.GameView
+    <com.framgia.carogame.view.GameView
         style="@style/MatchParrentStyle"
         android:background="@color/game_view_background_color"
         android:paddingBottom="@dimen/game_view_bottom_margin"
@@ -26,7 +24,7 @@
     <TextView
         style="@style/WrapContentStyle"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@{player.displayName}"
+        android:text="@{players.getPlayerName()}"
         android:id="@+id/player_name"
         android:layout_gravity="left|top"
         android:layout_marginTop="@dimen/player_name_top_margin"
@@ -36,7 +34,7 @@
     <TextView
         style="@style/WrapContentStyle"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@{enemy.displayName}"
+        android:text="@{players.getEnemyName()}"
         android:id="@+id/enemy_name"
         android:layout_gravity="right|top"
         android:layout_marginRight="@dimen/enemy_name_right_margin"
@@ -53,7 +51,7 @@
     <TextView
         style="@style/WrapContentStyle"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@{String.valueOf(player.score)}"
+        android:text="@{players.getPlayerScore()}"
         android:id="@+id/player_score"
         android:layout_gravity="left|top"
         android:layout_marginTop="@dimen/player_score_top_margin"
@@ -62,7 +60,7 @@
     <TextView
         style="@style/WrapContentStyle"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@{String.valueOf(enemy.score)}"
+        android:text="@{players.getEnemyScore()}"
         android:id="@+id/enemy_score"
         android:layout_gravity="right|top"
         android:layout_marginTop="@dimen/enemy_score_top_margin"

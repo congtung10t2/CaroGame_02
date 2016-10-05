@@ -1,4 +1,4 @@
-package com.framgia.carogame;
+package com.framgia.carogame.viewmodel.states;
 
 /**
  * Created by framgia on 27/09/2016.

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" >
     <data>
         <variable
-            name="playerStorage" type="com.framgia.carogame.PlayerStorage"/>
+            name="playerStorage" type="com.framgia.carogame.viewmodel.PlayerStorageViewModel"/>
     </data>
     <RelativeLayout
         style="@style/MatchParrentStyle"
@@ -59,7 +59,7 @@
 
                 <TextView
                     style="@style/RightTextOnTable"
-                    android:text="@{String.valueOf(playerStorage.getWin())}"
+                    android:text="@{playerStorage.getWin()}"
                     android:layout_column="1" />
 
             </TableRow>
@@ -72,7 +72,7 @@
 
                 <TextView
                     style="@style/RightTextOnTable"
-                    android:text="@{String.valueOf(playerStorage.getLost())}"
+                    android:text="@{playerStorage.getLost()}"
                     android:layout_column="1"/>
             </TableRow>
 
@@ -96,7 +96,7 @@
 
                 <TextView
                     style="@style/RightTextOnTable"
-                    android:text="@{String.valueOf(playerStorage.getStreak())}"
+                    android:text="@{playerStorage.getStreak()}"
                     android:layout_column="1"/>
             </TableRow>
 

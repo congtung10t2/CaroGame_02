@@ -1,4 +1,4 @@
-package com.framgia.carogame;
+package com.framgia.carogame.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -8,13 +8,17 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import com.framgia.carogame.R;
 import com.framgia.carogame.databinding.CaroActivityBinding;
+import com.framgia.carogame.model.constants.GameDef;
+import com.framgia.carogame.viewmodel.PlayerInfoViewModel;
+import com.framgia.carogame.viewmodel.games.OnNextTurn;
+import com.framgia.carogame.viewmodel.games.OnResult;
 
 public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult {
     public ProgressBar thinkingBar;
     private GameView gameView;
-    private PlayerInfo enemy;
-    private PlayerInfo player;
+    private PlayerInfoViewModel players;
     private CaroActivityBinding binding;
 
     @Override
@@ -22,8 +26,7 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.caro_activity);
         initGame();
-        binding.setEnemy(enemy);
-        binding.setPlayer(player);
+        binding.setPlayers(players);
         gameView = (GameView) findViewById(R.id.game_view);
         gameView.invalidate();
         gameView.setGameContext(this);
@@ -31,8 +34,7 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
     }
 
     public void initGame() {
-        enemy = new PlayerInfo(getResources().getString(R.string.enemy_name), 0);
-        player = new PlayerInfo(getResources().getString(R.string.player_name), 0);
+        players = new PlayerInfoViewModel();
     }
 
     public void onPlayerTurn() {
@@ -48,11 +50,11 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
     }
 
     public void onWin() {
-        player.increaseScoreBy(GameDef.SCORE_PER_GAME);
+        players.getPlayerInfo().increaseScoreBy(GameDef.SCORE_PER_GAME);
     }
 
     public void onLost() {
-        enemy.increaseScoreBy(GameDef.SCORE_PER_GAME);
+        players.getEnemyInfo().increaseScoreBy(GameDef.SCORE_PER_GAME);
     }
 
     public void hideProgressBar() {

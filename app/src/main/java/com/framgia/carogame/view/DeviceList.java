@@ -1,4 +1,4 @@
-package com.framgia.carogame;
+package com.framgia.carogame.view;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,6 +7,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.framgia.carogame.libs.ProgressBarUtils;
+import com.framgia.carogame.R;
+import com.framgia.carogame.viewmodel.services.BluetoothConnection;
 
 import java.util.ArrayList;
 

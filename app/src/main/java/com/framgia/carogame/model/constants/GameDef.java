@@ -1,4 +1,4 @@
-package com.framgia.carogame;
+package com.framgia.carogame.model.constants;
 
 /**
  * Created by framgia on 26/09/2016.

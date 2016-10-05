@@ -1,4 +1,4 @@
-package com.framgia.carogame;
+package com.framgia.carogame.model.data;
 
 /**
  * Created by framgia on 28/09/2016.
@@ -6,13 +6,11 @@ package com.framgia.carogame;
 public class PlayerStorage {
     private int win;
     private int lost;
-    private float rate;
     private int streak;
 
     public PlayerStorage(int win, int lost, int rate, int streak) {
         this.win = win;
         this.lost = lost;
-        this.rate = rate;
         this.streak = streak;
     }
 
@@ -21,7 +19,7 @@ public class PlayerStorage {
     }
 
     public void setWin(int win){
-        setWin(win, true);
+        this.win = win;
     }
 
     public void setWin(int win, boolean sync) {
@@ -32,7 +30,6 @@ public class PlayerStorage {
     }
 
     private void synchronize(boolean isWin) {
-        syncRate();
         if(isWin) streak++;
         else streak = 0;
     }
@@ -58,18 +55,6 @@ public class PlayerStorage {
 
     public void setStreak(int streak){
         this.streak = streak;
-    }
-
-    public void syncRate() {
-        rate = win/(win + lost);
-    }
-
-    public String getRatePercent() {
-       return String.format("%.0f%%", rate * GameDef.FLOAT_TO_PERCENT);
-    }
-
-    public float getRate(){
-        return rate;
     }
 
     public void increaseWinBy(int score){

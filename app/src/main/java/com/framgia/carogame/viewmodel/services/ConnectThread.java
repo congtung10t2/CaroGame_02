@@ -1,7 +1,10 @@
-package com.framgia.carogame;
+package com.framgia.carogame.viewmodel.services;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+
+import com.framgia.carogame.libs.LogUtils;
+import com.framgia.carogame.model.constants.ServicesDef;
 
 import java.io.IOException;
 
@@ -18,7 +21,7 @@ public class ConnectThread extends Thread implements ThreadCancel {
         try {
             socket = device.createRfcommSocketToServiceRecord(ServicesDef.MY_UUID_SECURE);
         } catch (IOException e) {
-            ServicesDef.log("Create connect socket fail", e);
+            LogUtils.logD("Create connect socket fail", e);
         }
     }
 
@@ -29,7 +32,7 @@ public class ConnectThread extends Thread implements ThreadCancel {
             socket = secure ? device.createRfcommSocketToServiceRecord(ServicesDef.MY_UUID_SECURE) :
                 device.createInsecureRfcommSocketToServiceRecord(ServicesDef.MY_UUID_INSECURE);
         } catch (IOException e) {
-            ServicesDef.log("Create connect socket fail", e);
+            LogUtils.logD("Create connect socket fail", e);
         }
     }
 
@@ -38,7 +41,7 @@ public class ConnectThread extends Thread implements ThreadCancel {
         try {
             socket.connect();
         } catch (IOException e) {
-            ServicesDef.log("Connect error!", e);
+            LogUtils.logD("Connect error!", e);
             return;
         }
         BluetoothConnection.getInstance().connected(socket, device, socketType);
@@ -48,7 +51,7 @@ public class ConnectThread extends Thread implements ThreadCancel {
         try {
             socket.close();
         } catch (IOException e) {
-            ServicesDef.log("Socket error!", e);
+            LogUtils.logD("Socket error!", e);
         }
     }
 }

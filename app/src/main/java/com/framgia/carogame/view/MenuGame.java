@@ -1,4 +1,4 @@
-package com.framgia.carogame;
+package com.framgia.carogame.view;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -11,11 +11,18 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.framgia.carogame.R;
 import com.framgia.carogame.databinding.MenuGameActivityBinding;
+import com.framgia.carogame.libs.GameHelper;
+import com.framgia.carogame.libs.ProgressBarUtils;
+import com.framgia.carogame.libs.ToastUtils;
+import com.framgia.carogame.model.constants.ServicesDef;
+import com.framgia.carogame.viewmodel.PlayerStorageViewModel;
+import com.framgia.carogame.viewmodel.services.BluetoothConnection;
 
 public class MenuGame extends AppCompatActivity {
     private MenuGameActivityBinding binding;
-    private PlayerStorage playerStorage;
+    private PlayerStorageViewModel playerStorageViewModel;
     private CheckBox checkBluetooth;
     private Button findDevices;
     private Button createGame;
@@ -49,8 +56,8 @@ public class MenuGame extends AppCompatActivity {
 
     public void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.menu_game_activity);
-        playerStorage = new PlayerStorage(0, 0, 0, 0);
-        binding.setPlayerStorage(playerStorage);
+        playerStorageViewModel = new PlayerStorageViewModel();
+        binding.setPlayerStorage(playerStorageViewModel);
         Snackbar snackBar = Snackbar.make(binding.getRoot(), GameHelper.getDeviceName(), Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.dissmiss, new View.OnClickListener() {
                     @Override

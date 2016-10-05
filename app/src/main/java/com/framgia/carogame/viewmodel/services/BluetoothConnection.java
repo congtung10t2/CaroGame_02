@@ -1,4 +1,4 @@
-package com.framgia.carogame;
+package com.framgia.carogame.viewmodel.services;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -12,6 +12,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+
+import com.framgia.carogame.model.enums.MessageTypes;
+import com.framgia.carogame.viewmodel.states.ConnectionState;
+import com.framgia.carogame.libs.GameHelper;
+import com.framgia.carogame.view.GameView;
+import com.framgia.carogame.R;
+import com.framgia.carogame.model.constants.ServicesDef;
+import com.framgia.carogame.libs.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -112,7 +120,7 @@ public class BluetoothConnection {
             FragmentActivity activity = (FragmentActivity) BluetoothConnection.getInstance()
                 .getGameContext();
             if (activity == null) return;
-            ServicesDef.MessageType msgType = ServicesDef.MessageType.getMessageType(message.what);
+            MessageTypes msgType = MessageTypes.getMessageType(message.what);
             ConnectionState.State msgArg = ConnectionState.State.getState(message.arg1);
             switch (msgType) {
                 case STATE_CHANGE:
@@ -179,8 +187,7 @@ public class BluetoothConnection {
         stopForConnectedNode();
         connectedNode = new ConnectedNode(socket, socketType);
         connectedNode.start();
-        Message msg = handler.obtainMessage(ServicesDef.MessageType.
-            toInt(ServicesDef.MessageType.DEVICE_NAME));
+        Message msg = handler.obtainMessage(MessageTypes.toInt(MessageTypes.DEVICE_NAME));
         Bundle bundle = new Bundle();
         bundle.putString(ServicesDef.DEVICE_NAME, device.getName());
         msg.setData(bundle);

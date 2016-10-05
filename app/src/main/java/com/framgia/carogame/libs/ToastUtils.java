@@ -1,7 +1,9 @@
-package com.framgia.carogame;
+package com.framgia.carogame.libs;
 
 import android.content.Context;
 import android.widget.Toast;
+
+import com.framgia.carogame.viewmodel.services.BluetoothConnection;
 
 /**
  * Created by framgia on 03/10/2016.

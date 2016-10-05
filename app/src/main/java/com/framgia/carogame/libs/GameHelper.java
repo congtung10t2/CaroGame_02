@@ -1,6 +1,8 @@
-package com.framgia.carogame;
+package com.framgia.carogame.libs;
 
 import android.os.Build;
+
+import com.framgia.carogame.viewmodel.services.ThreadCancel;
 
 /**
  * Created by framgia on 28/09/2016.

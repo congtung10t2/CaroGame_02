@@ -1,9 +1,16 @@
-package com.framgia.carogame;
+package com.framgia.carogame.viewmodel.services;
 
 import android.bluetooth.BluetoothSocket;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Message;
+
+import com.framgia.carogame.libs.LogUtils;
+import com.framgia.carogame.libs.ProgressBarUtils;
+import com.framgia.carogame.R;
+import com.framgia.carogame.model.constants.ServicesDef;
+import com.framgia.carogame.model.enums.MessageTypes;
+import com.framgia.carogame.viewmodel.states.ConnectionState;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +32,7 @@ public class ConnectedNode extends Thread implements ThreadCancel {
             tempIn = socket.getInputStream();
             tempOut = socket.getOutputStream();
         } catch (IOException e) {
-            ServicesDef.log("Create connected socket error", e);
+            LogUtils.logD("Create connected socket error", e);
         }
         inputStream = tempIn;
         outputStream = tempOut;
@@ -38,7 +45,7 @@ public class ConnectedNode extends Thread implements ThreadCancel {
             ConnectionState.State.STATE_CONNECTED) {
             try {
                 bytes = inputStream.read(buffer);
-                BluetoothConnection.getInstance().handler.obtainMessage(ServicesDef.MessageType
+                BluetoothConnection.getInstance().handler.obtainMessage(MessageTypes
                     .READ.ordinal(), bytes, -1, buffer).sendToTarget();
             } catch (IOException e) {
                 connectionLost();
@@ -50,8 +57,8 @@ public class ConnectedNode extends Thread implements ThreadCancel {
 
     private void connectionFailed() {
         // Send a failure message back to the Activity
-        Message msg = BluetoothConnection.getInstance().handler.obtainMessage(ServicesDef
-            .MessageType.TOAST.ordinal());
+        Message msg = BluetoothConnection.getInstance().handler.
+            obtainMessage(MessageTypes.TOAST.ordinal());
         Bundle bundle = new Bundle();
         bundle.putString(ServicesDef.TOAST, Resources.getSystem().getString(R.string
             .unable_to_connect_device));
@@ -62,8 +69,8 @@ public class ConnectedNode extends Thread implements ThreadCancel {
     }
 
     private void connectionLost() {
-        Message msg = BluetoothConnection.getInstance().handler.obtainMessage(ServicesDef
-            .MessageType.TOAST.ordinal());
+        Message msg = BluetoothConnection.getInstance().handler.
+            obtainMessage(MessageTypes.TOAST.ordinal());
         Bundle bundle = new Bundle();
         bundle.putString(ServicesDef.TOAST,Resources.getSystem().
             getString(R.string.device_connection_lost));
@@ -77,9 +84,9 @@ public class ConnectedNode extends Thread implements ThreadCancel {
         try {
             outputStream.write(buffer);
             BluetoothConnection.getInstance().handler.obtainMessage
-                (ServicesDef.MessageType.WRITE.ordinal(), -1, -1, buffer).sendToTarget();
+                (MessageTypes.WRITE.ordinal(), -1, -1, buffer).sendToTarget();
         } catch (IOException e) {
-            ServicesDef.log("write data error", e);
+            LogUtils.logD("write data error", e);
         }
     }
 
@@ -87,7 +94,7 @@ public class ConnectedNode extends Thread implements ThreadCancel {
         try {
             socket.close();
         } catch (IOException e) {
-            ServicesDef.log("cancel connected socket error", e);
+            LogUtils.logD("cancel connected socket error", e);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.framgia.carogame;
+package com.framgia.carogame.viewmodel.games;
 
 /**
  * Created by congtung10t2 on 24-Sep-16.

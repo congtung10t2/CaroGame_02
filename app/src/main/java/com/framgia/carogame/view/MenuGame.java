@@ -1,5 +1,6 @@
 package com.framgia.carogame.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 import com.framgia.carogame.R;
 import com.framgia.carogame.databinding.MenuGameActivityBinding;
 import com.framgia.carogame.libs.GameHelper;
-import com.framgia.carogame.libs.ProgressBarUtils;
+import com.framgia.carogame.libs.ProgressDialogUtils;
 import com.framgia.carogame.libs.ToastUtils;
 import com.framgia.carogame.model.constants.ServicesDef;
 import com.framgia.carogame.viewmodel.PlayerStorageViewModel;
@@ -110,7 +111,10 @@ public class MenuGame extends AppCompatActivity {
     }
 
     public void startGame(View view) {
-        BluetoothConnection.getInstance().StartServer();
-        ProgressBarUtils.showPB(MenuGame.this, R.string.loading, R.string.please_wait);
+        BluetoothConnection.getInstance().startServer();
+
+        ProgressDialog pd = ProgressDialogUtils.showPB(MenuGame.this, R.string.loading,
+            R.string.please_wait);
+        BluetoothConnection.getInstance().setProgressDialog(pd);
     }
 }

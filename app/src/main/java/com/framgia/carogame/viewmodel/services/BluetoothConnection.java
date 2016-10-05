@@ -1,6 +1,7 @@
 package com.framgia.carogame.viewmodel.services;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -13,13 +14,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 
-import com.framgia.carogame.model.enums.MessageTypes;
-import com.framgia.carogame.viewmodel.states.ConnectionState;
-import com.framgia.carogame.libs.GameHelper;
-import com.framgia.carogame.view.GameView;
 import com.framgia.carogame.R;
-import com.framgia.carogame.model.constants.ServicesDef;
+import com.framgia.carogame.libs.GameHelper;
+import com.framgia.carogame.libs.LogUtils;
 import com.framgia.carogame.libs.ToastUtils;
+import com.framgia.carogame.model.constants.ServicesDef;
+import com.framgia.carogame.model.enums.MessageTypes;
+import com.framgia.carogame.view.CaroGame;
+import com.framgia.carogame.viewmodel.games.OnGameCallback;
+import com.framgia.carogame.viewmodel.states.ConnectionState;
+import com.framgia.carogame.viewmodel.states.StateListener;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -27,7 +31,7 @@ import java.util.Set;
 /**
  * Created by framgia on 27/09/2016.
  */
-public class BluetoothConnection {
+public class BluetoothConnection implements StateListener {
     private static BluetoothConnection instance = new BluetoothConnection();
     private BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private ArrayList devices = new ArrayList();
@@ -38,6 +42,46 @@ public class BluetoothConnection {
     private AcceptThread insecureAcceptThread;
     private Context mainContext;
     private String enemyDeviceName;
+    private BluetoothDevice currentDevice;
+    private ProgressDialog progressDialog;
+    private OnGameCallback gameCallback;
+    private boolean isServer;
+    private boolean isSecureConnect;
+
+    public ConnectThread getConnectThread() {
+        return connectThread;
+    }
+
+    public void setConnectThread(ConnectThread connectThread) {
+        this.connectThread = connectThread;
+    }
+
+    public boolean isSecureConnect() {
+        return isSecureConnect;
+    }
+
+    public void setSecureConnect(boolean secureConnect) {
+        isSecureConnect = secureConnect;
+    }
+
+    private BluetoothConnection() {
+    }
+
+    public void setCurrentDevice(BluetoothDevice device){
+        currentDevice = device;
+    }
+
+    public BluetoothDevice getCurrentDevice(){
+        return currentDevice;
+    }
+
+    public ProgressDialog getProgressDialog(){
+        return progressDialog;
+    }
+
+    public void setProgressDialog(ProgressDialog progressDialog){
+        this.progressDialog = progressDialog;
+    }
 
     public String getEnemyDeviceName() {
         return enemyDeviceName;
@@ -47,7 +91,8 @@ public class BluetoothConnection {
         this.enemyDeviceName = enemyDeviceName;
     }
 
-    private BluetoothConnection() {
+    public void setGameCallback(OnGameCallback gcb){
+        gameCallback = gcb;
     }
 
     public void stopAcceptThread() {
@@ -64,24 +109,32 @@ public class BluetoothConnection {
         connectedNode = null;
     }
 
+    public boolean isServer(){
+        return isServer;
+    }
+
+    public void setServer(){
+        isServer = true;
+    }
+
+    public void setClient(){
+        isServer = false;
+    }
 
     public void stopForConnectedNode() {
         stopConnectThread();
         stopAcceptThread();
     }
 
-    public synchronized void StartServer() {
+    public synchronized void startServer() {
         stopConnectThread();
         ConnectionState.getInstance().setState(ConnectionState.State.STATE_LISTEN);
         if (secureAcceptThread == null) {
             secureAcceptThread = new AcceptThread(true);
-            ToastUtils.showToast(R.string.start_server_secure);
             secureAcceptThread.start();
         }
-        if (insecureAcceptThread != null) return;
-        insecureAcceptThread = new AcceptThread(false);
-        ToastUtils.showToast(R.string.start_server_insecure);
-        insecureAcceptThread.start();
+
+        setServer();
     }
 
     public void enable() {
@@ -124,14 +177,14 @@ public class BluetoothConnection {
             ConnectionState.State msgArg = ConnectionState.State.getState(message.arg1);
             switch (msgType) {
                 case STATE_CHANGE:
-                    if (msgArg != ConnectionState.State.STATE_CONNECTED) break;
-                    activity.startActivity(new Intent(activity, GameView.class));
+                    LogUtils.logD("State changed");
                     break;
                 case WRITE:
                     break;
                 case READ:
                     byte[] readBuf = (byte[]) message.obj;
                     String readMessage = new String(readBuf, 0, message.arg1);
+                    gameCallback.onMessage(readMessage);
                     //TODO: handle data from other user in game
                     break;
                 case DEVICE_NAME:
@@ -145,6 +198,10 @@ public class BluetoothConnection {
             }
         }
     };
+
+    public void writes(String msg){
+        connectedNode.write(msg.getBytes());
+    }
 
     public void disable() {
         if (bluetoothAdapter == null) return;
@@ -168,8 +225,14 @@ public class BluetoothConnection {
     }
 
     public void init() {
+        ConnectionState.getInstance().registerState(this);
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         mainContext.registerReceiver(mReceiver, filter);
+    }
+
+    public void onStateChanged(ConnectionState.State oldState, ConnectionState.State newState){
+        handler.obtainMessage(MessageTypes.toInt(MessageTypes.STATE_CHANGE), ConnectionState
+            .State.toInt(newState), -1).sendToTarget();
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -185,20 +248,28 @@ public class BluetoothConnection {
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice
         device, final String socketType) {
         stopForConnectedNode();
+        BluetoothConnection.getInstance().setCurrentDevice(device);
         connectedNode = new ConnectedNode(socket, socketType);
         connectedNode.start();
+        if(progressDialog != null) progressDialog.dismiss();
         Message msg = handler.obtainMessage(MessageTypes.toInt(MessageTypes.DEVICE_NAME));
         Bundle bundle = new Bundle();
         bundle.putString(ServicesDef.DEVICE_NAME, device.getName());
         msg.setData(bundle);
+
         handler.sendMessage(msg);
+        mainContext.startActivity(new Intent(mainContext, CaroGame.class));
         ConnectionState.getInstance().setState(ConnectionState.State.STATE_CONNECTED);
+
+
     }
 
     public synchronized void connect(BluetoothDevice device, boolean secure) {
         stopConnectThread();
+        setSecureConnect(secure);
         connectThread = new ConnectThread(device, secure);
         connectThread.start();
         ConnectionState.getInstance().setState(ConnectionState.State.STATE_CONNECTING);
+        setClient();
     }
 }

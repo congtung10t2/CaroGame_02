@@ -35,5 +35,4 @@ public class PlayerStorageViewModel {
     public String getStreak() {
         return Integer.toString(playerStorage.getStreak());
     }
-
 }

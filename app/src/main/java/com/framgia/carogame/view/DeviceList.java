@@ -1,6 +1,7 @@
 package com.framgia.carogame.view;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.framgia.carogame.libs.ProgressBarUtils;
+import com.framgia.carogame.libs.ProgressDialogUtils;
 import com.framgia.carogame.R;
 import com.framgia.carogame.viewmodel.services.BluetoothConnection;
 
@@ -37,8 +38,9 @@ public class DeviceList extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ProgressBarUtils.showPB(DeviceList.this, getString(R.string.loading),
-                            getString(R.string.loading_date));
+                        ProgressDialog pd = ProgressDialogUtils.showPB(DeviceList.this, getString(R
+                            .string.loading), getString(R.string.loading_date));
+                        BluetoothConnection.getInstance().setProgressDialog(pd);
                     }
                 });
 

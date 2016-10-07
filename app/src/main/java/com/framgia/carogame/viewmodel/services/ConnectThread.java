@@ -44,6 +44,7 @@ public class ConnectThread extends Thread implements ThreadCancel {
             LogUtils.logD("Connect error!", e);
             return;
         }
+        BluetoothConnection.getInstance().setConnectThread(null);
         BluetoothConnection.getInstance().connected(socket, device, socketType);
     }
 

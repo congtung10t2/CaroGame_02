@@ -25,5 +25,8 @@ public class GameHelper {
         if(thread == null) return;
         thread.cancel();
     }
-    
+
+    public static boolean isValidInRange(int val, int min, int max){
+        return val >= min && val <= max;
+    }
 }

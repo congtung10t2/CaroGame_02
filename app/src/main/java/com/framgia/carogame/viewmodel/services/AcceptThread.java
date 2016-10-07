@@ -27,7 +27,7 @@ public class AcceptThread extends Thread implements ThreadCancel {
                     ServicesDef.MY_UUID_SECURE) :
                 adapterBT.listenUsingInsecureRfcommWithServiceRecord(ServicesDef.NAME_INSECURE,
                     ServicesDef.MY_UUID_INSECURE);
-            ToastUtils.showToast(R.string.start_game);
+            //ToastUtils.showToast(R.string.start_game);
         } catch (IOException e) {
             LogUtils.logD("Create accept socket fail!", e);
         }
@@ -63,8 +63,9 @@ public class AcceptThread extends Thread implements ThreadCancel {
                 socket = serverSocket.accept();
             } catch (IOException e) {
                 LogUtils.logD("Socket accept run error!", e);
+                return;
             }
-            if (socket == null) continue;
+            if (socket == null) return;
             waiting(socket);
         }
     }

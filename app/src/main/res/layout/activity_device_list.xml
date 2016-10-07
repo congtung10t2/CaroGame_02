@@ -13,8 +13,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              style="@style/MatchParrentStyle"
+<LinearLayout style="@style/MatchParrentStyle"
+              xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical">
 
     <ListView
@@ -29,6 +29,6 @@
         android:id="@+id/button_scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_scan"
-        android:onClick="scan"/>
+        android:onClick="scan"
+        android:text="@string/button_scan"/>
 </LinearLayout>

@@ -256,12 +256,9 @@ public class BluetoothConnection implements StateListener {
         Bundle bundle = new Bundle();
         bundle.putString(ServicesDef.DEVICE_NAME, device.getName());
         msg.setData(bundle);
-
         handler.sendMessage(msg);
         mainContext.startActivity(new Intent(mainContext, CaroGame.class));
         ConnectionState.getInstance().setState(ConnectionState.State.STATE_CONNECTED);
-
-
     }
 
     public synchronized void connect(BluetoothDevice device, boolean secure) {

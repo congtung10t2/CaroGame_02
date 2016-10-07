@@ -42,7 +42,7 @@ public class GameView extends View implements OnGameCallback {
         resetGame();
     }
 
-    private void enemyWin(){
+    public void enemyWin(){
         caroGame.onLost();
         resetGame();
     }
@@ -57,6 +57,7 @@ public class GameView extends View implements OnGameCallback {
                 enemyWin();
                 break;
             case LEAVE:
+                caroGame.saveCurrentProcess();
                 caroGame.finish();
                 break;
             case TICK:

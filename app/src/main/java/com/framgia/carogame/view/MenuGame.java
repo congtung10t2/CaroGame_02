@@ -29,10 +29,15 @@ public class MenuGame extends AppCompatActivity {
     private Button createGame;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         initView();
         initBluetooth();
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        binding.invalidateAll();
     }
 
     public void initBluetooth() {
@@ -58,6 +63,7 @@ public class MenuGame extends AppCompatActivity {
     public void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.menu_game_activity);
         playerStorageViewModel = new PlayerStorageViewModel();
+        playerStorageViewModel.setPlayerFromStorage();
         binding.setPlayerStorage(playerStorageViewModel);
         Snackbar snackBar = Snackbar.make(binding.getRoot(), GameHelper.getDeviceName(), Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.dissmiss, new View.OnClickListener() {
@@ -112,7 +118,6 @@ public class MenuGame extends AppCompatActivity {
 
     public void startGame(View view) {
         BluetoothConnection.getInstance().startServer();
-
         ProgressDialog pd = ProgressDialogUtils.showPB(MenuGame.this, R.string.loading,
             R.string.please_wait);
         BluetoothConnection.getInstance().setProgressDialog(pd);

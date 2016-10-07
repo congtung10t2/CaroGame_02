@@ -35,4 +35,9 @@
     <string name="connect_to_game_fail">Connect to game fail</string>
     <string name="send_data_error">Send data error!</string>
     <string name="socket_error">Socket close error!</string>
+    <string name="surrender">Surrender</string>
+    <string name="surrender_title">Surrender</string>
+    <string name="ays_msg">Are you sure?</string>
+    <string name="quit">QUIT</string>
+    <string name="leave_title">Leave</string>
 </resources>

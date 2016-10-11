@@ -21,4 +21,5 @@ public class ServicesDef {
     public static final String INSECURE = "Insecure";
     public static final String TOAST = "toast";
     public static final int MAX_BYTES_ALLOC = 1024;
+    public static final String fileStorage = "player.dat";
 }

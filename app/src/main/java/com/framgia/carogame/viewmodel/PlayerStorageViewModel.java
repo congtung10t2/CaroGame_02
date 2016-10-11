@@ -1,5 +1,6 @@
 package com.framgia.carogame.viewmodel;
 
+import com.framgia.carogame.libs.UserStorage;
 import com.framgia.carogame.model.data.PlayerStorage;
 import com.framgia.carogame.model.constants.GameDef;
 
@@ -9,8 +10,11 @@ import com.framgia.carogame.model.constants.GameDef;
 public class PlayerStorageViewModel {
     private PlayerStorage playerStorage;
 
-    public PlayerStorageViewModel(){
-        playerStorage = new PlayerStorage(0, 0, 0, 0);
+    public void setPlayerFromStorage(){
+        UserStorage.getInstance().load();
+        playerStorage = UserStorage.getInstance().getPlayerStorage();
+        if(playerStorage != null) return;
+        playerStorage = new PlayerStorage();
     }
 
     public PlayerStorage getPlayerStorage() {
@@ -18,9 +22,11 @@ public class PlayerStorageViewModel {
     }
 
     public String getRatePercent() {
-        float win = playerStorage.getWin();
-        float lost = playerStorage.getLost();
-        float rate = win/(win + lost);
+        float rate = 0;
+        int win = playerStorage.getWin();
+        int lost = playerStorage.getLost();
+        if(win + lost > 0)
+        rate = win/(float)(win + lost);
         return String.format("%.0f%%", rate * GameDef.FLOAT_TO_PERCENT);
     }
 

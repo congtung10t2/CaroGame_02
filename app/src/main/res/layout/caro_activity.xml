@@ -1,83 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
+
         <variable
-            name="players" type="com.framgia.carogame.viewmodel.PlayerInfoViewModel"/>
+            name="players"
+            type="com.framgia.carogame.viewmodel.PlayerInfoViewModel"/>
     </data>
-<FrameLayout
-    style="@style/MatchParrentStyle"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <com.framgia.carogame.view.GameView
+    <FrameLayout
         style="@style/MatchParrentStyle"
-        android:background="@color/game_view_background_color"
-        android:paddingBottom="@dimen/game_view_bottom_margin"
-        android:paddingLeft="@dimen/game_view_left_margin"
-        android:paddingRight="@dimen/game_view_right_margin"
-        android:layout_gravity="center"
-        android:id="@+id/game_view" />
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-    <TextView
-        style="@style/WrapContentStyle"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@{players.getPlayerName()}"
-        android:id="@+id/player_name"
-        android:layout_gravity="left|top"
-        android:layout_marginTop="@dimen/player_name_top_margin"
-        android:layout_marginLeft="@dimen/player_name_left_margin"
-        android:elegantTextHeight="false"/>
+        <com.framgia.carogame.view.GameView
+            android:id="@+id/game_view"
+            style="@style/MatchParrentStyle"
+            android:layout_gravity="center"
+            android:background="@color/game_view_background_color"
+            android:paddingBottom="@dimen/game_view_bottom_margin"
+            android:paddingLeft="@dimen/game_view_left_margin"
+            android:paddingRight="@dimen/game_view_right_margin"/>
 
-    <TextView
-        style="@style/WrapContentStyle"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@{players.getEnemyName()}"
-        android:id="@+id/enemy_name"
-        android:layout_gravity="right|top"
-        android:layout_marginRight="@dimen/enemy_name_right_margin"
-        android:layout_marginTop="@dimen/enemy_name_top_margin"/>
+        <TextView
+            android:id="@+id/player_name"
+            style="@style/WrapContentStyle"
+            android:layout_gravity="left|top"
+            android:layout_marginLeft="@dimen/player_name_left_margin"
+            android:layout_marginTop="@dimen/player_name_top_margin"
+            android:elegantTextHeight="false"
+            android:text="@{players.getPlayerName()}"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-    <TextView
-        style="@style/WrapContentStyle"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/vs"
-        android:id="@+id/vs"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="@dimen/vs_top_margin"/>
+        <TextView
+            android:id="@+id/enemy_name"
+            style="@style/WrapContentStyle"
+            android:layout_gravity="right|top"
+            android:layout_marginRight="@dimen/enemy_name_right_margin"
+            android:layout_marginTop="@dimen/enemy_name_top_margin"
+            android:text="@{players.getEnemyName()}"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-    <TextView
-        style="@style/WrapContentStyle"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@{players.getPlayerScore()}"
-        android:id="@+id/player_score"
-        android:layout_gravity="left|top"
-        android:layout_marginTop="@dimen/player_score_top_margin"
-        android:layout_marginLeft="@dimen/player_score_left_margin"/>
+        <TextView
+            android:id="@+id/vs"
+            style="@style/WrapContentStyle"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="@dimen/vs_top_margin"
+            android:text="@string/vs"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-    <TextView
-        style="@style/WrapContentStyle"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@{players.getEnemyScore()}"
-        android:id="@+id/enemy_score"
-        android:layout_gravity="right|top"
-        android:layout_marginTop="@dimen/enemy_score_top_margin"
-        android:layout_marginRight="@dimen/enemy_score_right_margin"/>
-    <ProgressBar
-        android:id="@+id/thinking_bar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:layout_marginTop="@dimen/thinking_bar_top_margin"
-        android:layout_marginRight="@dimen/thinking_bar_horizontal_margin"
-        android:layout_centerHorizontal="true"
-        android:visibility="visible"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        android:indeterminateTint="@color/progress_bar_color" />
+        <TextView
+            android:id="@+id/player_score"
+            style="@style/WrapContentStyle"
+            android:layout_gravity="left|top"
+            android:layout_marginLeft="@dimen/player_score_left_margin"
+            android:layout_marginTop="@dimen/player_score_top_margin"
+            android:text="@{players.getPlayerScore()}"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/enemy_score"
+            style="@style/WrapContentStyle"
+            android:layout_gravity="right|top"
+            android:layout_marginRight="@dimen/enemy_score_right_margin"
+            android:layout_marginTop="@dimen/enemy_score_top_margin"
+            android:text="@{players.getEnemyScore()}"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <ProgressBar
+            android:id="@+id/thinking_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="right|top"
+            android:layout_marginRight="@dimen/thinking_bar_horizontal_margin"
+            android:layout_marginTop="@dimen/thinking_bar_top_margin"
+            android:indeterminateTint="@color/progress_bar_color"
+            android:scaleX="0.5"
+            android:scaleY="0.5"/>
+
+        <Button
+            android:id="@+id/surrender"
+            style="@style/WrapContentStyle"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="@dimen/surrender_button_top_margin"
+            android:onClick="surrender"
+            android:text="@string/surrender"/>
+
+        <Button
+            android:id="@+id/quit"
+            style="@style/WrapContentStyle"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="@dimen/quit_button_top_margin"
+            android:onClick="leave"
+            android:text="@string/quit"/>
+
+    </FrameLayout>
 </layout>

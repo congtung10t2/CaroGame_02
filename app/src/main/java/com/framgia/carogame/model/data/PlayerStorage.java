@@ -6,10 +6,14 @@ import com.framgia.carogame.CaroGameApplication;
 import com.framgia.carogame.libs.LogUtils;
 import com.framgia.carogame.model.constants.ServicesDef;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
@@ -44,6 +48,24 @@ public class PlayerStorage implements Serializable {
             fis.close();
         } catch (IOException e) {
             LogUtils.logD("Input stream error!", e);
+        } catch (ClassNotFoundException e) {
+            LogUtils.logD("Class not found!", e);
+        }
+        return playerStorage;
+    }
+
+    public static PlayerStorage loadByGps(){
+        PlayerStorage playerStorage = null;
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(CaroGameApplication.
+                getInstance().loadGame());
+            ObjectInput in = null;
+            in = new ObjectInputStream(bis);
+            playerStorage = (PlayerStorage) in.readObject();
+            bis.close();
+            in.close();
+        } catch (IOException e) {
+            LogUtils.logD("Saved to Gps error!", e);
         } catch (ClassNotFoundException e) {
             LogUtils.logD("Class not found!", e);
         }
@@ -99,6 +121,20 @@ public class PlayerStorage implements Serializable {
 
     public void increaseLostBy(int score) {
         setLost(lost + score, true);
+    }
+
+    public void saveByGps(){
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            ObjectOutput objOut = new ObjectOutputStream(bos);
+            objOut.writeObject(this);
+            objOut.flush();
+            CaroGameApplication.getInstance().saveGame(bos.toByteArray());
+            bos.close();
+            objOut.close();
+        } catch (IOException e) {
+            LogUtils.logD("Saved to Gps error!", e);
+        }
     }
 
     public boolean save() {

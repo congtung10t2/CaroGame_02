@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.framgia.carogame.CaroGameApplication;
 import com.framgia.carogame.R;
 import com.framgia.carogame.databinding.MenuGameActivityBinding;
 import com.framgia.carogame.libs.GameHelper;
@@ -38,6 +39,18 @@ public class MenuGame extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         binding.invalidateAll();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        CaroGameApplication.getInstance().connectGps();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        CaroGameApplication.getInstance().disconnectGps();
     }
 
     public void initBluetooth() {

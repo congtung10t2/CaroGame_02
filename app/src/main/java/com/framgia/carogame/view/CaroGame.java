@@ -1,5 +1,6 @@
 package com.framgia.carogame.view;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 
 import com.framgia.carogame.R;
 import com.framgia.carogame.databinding.CaroActivityBinding;
+import com.framgia.carogame.libs.ProgressDialogUtils;
 import com.framgia.carogame.libs.UserStorage;
 import com.framgia.carogame.model.constants.GameDef;
 import com.framgia.carogame.model.enums.Commands;
@@ -30,6 +32,12 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        BluetoothConnection.getInstance().stopAllConnect();
     }
 
     public void saveCurrentProcess() {
@@ -100,6 +108,7 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
                 public void onClick(DialogInterface dialog, int whichButton) {
                     BluetoothConnection.getInstance().writes(Commands.LEAVE.name());
                     saveCurrentProcess();
+                    BluetoothConnection.getInstance().stopAllConnect();
                     CaroGame.this.finish();
                 }
             }).setNegativeButton(android.R.string.no, null).show();
@@ -116,5 +125,11 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
 
     public void showProgressBar() {
         thinkingBar.setVisibility(View.VISIBLE);
+    }
+
+    public void showProgressDialog(){
+        ProgressDialog pd =  ProgressDialogUtils
+            .show(this, R.string.reconnecting_title, R.string.please_wait);
+        BluetoothConnection.getInstance().setProgressDialog(pd);
     }
 }

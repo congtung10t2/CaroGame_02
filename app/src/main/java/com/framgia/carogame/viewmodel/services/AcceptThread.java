@@ -27,7 +27,6 @@ public class AcceptThread extends Thread implements ThreadCancel {
                     ServicesDef.MY_UUID_SECURE) :
                 adapterBT.listenUsingInsecureRfcommWithServiceRecord(ServicesDef.NAME_INSECURE,
                     ServicesDef.MY_UUID_INSECURE);
-            //ToastUtils.showToast(R.string.start_game);
         } catch (IOException e) {
             LogUtils.logD("Create accept socket fail!", e);
         }
@@ -57,7 +56,7 @@ public class AcceptThread extends Thread implements ThreadCancel {
     }
 
     public void run() {
-        BluetoothSocket socket = null;
+        BluetoothSocket socket;
         while (true) {
             try {
                 socket = serverSocket.accept();

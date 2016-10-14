@@ -42,4 +42,11 @@
     <string name="app_id">136987409570</string>
     <string name="leave_title">Leave</string>
     <string name="reconnecting_title">Reconnecting</string>
+    <string name="share">Share</string>
+    <string name="facebook_app_id">741654635923028</string>
+    <string name="title_activity_share_dialog">ShareDialogActivity</string>
+    <string name="share_success">Share success</string>
+    <string name="share_cancelled">Share cancelled</string>
+    <string name="share_error">Share error</string>
+    <string name="cannot_share">Cannot share</string>
 </resources>

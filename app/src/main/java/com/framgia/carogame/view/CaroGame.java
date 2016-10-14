@@ -11,9 +11,17 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.framgia.carogame.R;
 import com.framgia.carogame.databinding.CaroActivityBinding;
+import com.framgia.carogame.libs.GameHelper;
 import com.framgia.carogame.libs.ProgressDialogUtils;
+import com.framgia.carogame.libs.ToastUtils;
 import com.framgia.carogame.libs.UserStorage;
 import com.framgia.carogame.model.constants.GameDef;
 import com.framgia.carogame.model.enums.Commands;
@@ -27,6 +35,7 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
     private GameView gameView;
     private PlayerInfoViewModel players;
     private CaroActivityBinding binding;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +126,33 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
     public void onLost() {
         players.getEnemyInfo().increaseScoreBy(GameDef.SCORE_PER_GAME);
         binding.invalidateAll();
+    }
+
+    public void onShareFacebook(View view){
+        SharePhotoContent content = GameHelper.shareImage(getWindow().getDecorView());
+        ShareDialog shareDialog = new ShareDialog(this);
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                ToastUtils.showToast(R.string.share_success, CaroGame.this);
+            }
+
+            @Override
+            public void onCancel() {
+                ToastUtils.showToast(R.string.share_cancelled, CaroGame.this);
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                ToastUtils.showToast(R.string.share_error, CaroGame.this);
+            }
+        });
+        if (ShareDialog.canShow(SharePhotoContent.class)) {
+            shareDialog.show(content);
+        } else {
+            ToastUtils.showToast(R.string.cannot_share, CaroGame.this);
+        }
     }
 
     public void hideProgressBar() {

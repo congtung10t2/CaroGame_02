@@ -126,12 +126,14 @@ public class MenuGame extends AppCompatActivity {
     }
 
     public void findDevices(View view) {
+        BluetoothConnection.getInstance().setReconnecting(false);
         startActivity(new Intent(this, DeviceList.class));
     }
 
     public void startGame(View view) {
+        BluetoothConnection.getInstance().setReconnecting(false);
         BluetoothConnection.getInstance().startServer();
-        ProgressDialog pd = ProgressDialogUtils.showPB(MenuGame.this, R.string.loading,
+        ProgressDialog pd = ProgressDialogUtils.show(MenuGame.this, R.string.loading,
             R.string.please_wait);
         BluetoothConnection.getInstance().setProgressDialog(pd);
     }

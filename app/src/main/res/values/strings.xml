@@ -41,4 +41,5 @@
     <string name="quit">QUIT</string>
     <string name="app_id">136987409570</string>
     <string name="leave_title">Leave</string>
+    <string name="reconnecting_title">Reconnecting</string>
 </resources>

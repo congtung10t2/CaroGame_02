@@ -17,7 +17,7 @@ import java.io.OutputStream;
  * Created by framgia on 30/09/2016.
  */
 public class ConnectedNode extends Thread implements ThreadCancel {
-    private final BluetoothSocket socket;
+    private BluetoothSocket socket;
     private final InputStream inputStream;
     private final OutputStream outputStream;
 
@@ -39,13 +39,13 @@ public class ConnectedNode extends Thread implements ThreadCancel {
     public void run() {
         byte[] buffer = new byte[ServicesDef.MAX_BYTES_ALLOC];
         int bytes;
-        while (true) {
+        while (socket != null) {
             try {
                 bytes = inputStream.read(buffer);
                 BluetoothConnection.getInstance().handler.obtainMessage(MessageTypes.
                     toInt(MessageTypes.READ), bytes, -1, buffer).sendToTarget();
             } catch (IOException e) {
-
+                connectionLost();
             }
         }
     }
@@ -59,20 +59,18 @@ public class ConnectedNode extends Thread implements ThreadCancel {
             getString(R.string.unable_to_connect_device));
         msg.setData(bundle);
         BluetoothConnection.getInstance().handler.sendMessage(msg);
-        // Reconnect
-        BluetoothConnection connection = BluetoothConnection.getInstance();
-        if(connection.isServer()) connection.startServer();
-        else connection.connect(connection.getCurrentDevice(), connection.isSecureConnect());
+        cancel();
     }
 
     private void connectionLost() {
         Message msg = BluetoothConnection.getInstance().handler.
-            obtainMessage(MessageTypes.toInt(MessageTypes.TOAST));
+            obtainMessage(MessageTypes.toInt(MessageTypes.CONNECTION_LOST));
         Bundle bundle = new Bundle();
         bundle.putString(ServicesDef.TOAST,BluetoothConnection.getInstance().getGameContext().
             getString(R.string.device_connection_lost));
         msg.setData(bundle);
         BluetoothConnection.getInstance().handler.sendMessage(msg);
+        cancel();
     }
 
     public boolean write(byte[] buffer) {
@@ -90,9 +88,11 @@ public class ConnectedNode extends Thread implements ThreadCancel {
 
     public void cancel() {
         try {
+            if(socket == null) return;
             socket.close();
         } catch (IOException e) {
             LogUtils.logD("cancel connected socket error", e);
         }
+        socket = null;
     }
 }

@@ -38,7 +38,7 @@ public class DeviceList extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ProgressDialog pd = ProgressDialogUtils.showPB(DeviceList.this, getString(R
+                        ProgressDialog pd = ProgressDialogUtils.show(DeviceList.this, getString(R
                             .string.loading), getString(R.string.loading_date));
                         BluetoothConnection.getInstance().setProgressDialog(pd);
                     }

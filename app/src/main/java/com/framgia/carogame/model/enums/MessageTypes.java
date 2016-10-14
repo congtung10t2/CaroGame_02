@@ -9,7 +9,8 @@ public enum MessageTypes {
     READ(2),
     WRITE(3),
     DEVICE_NAME(4),
-    TOAST(5);
+    CONNECTION_LOST(5),
+    TOAST(6);
     private int value;
     MessageTypes(int id) {
         value = id;

@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.facebook.FacebookSdk;
 import com.framgia.carogame.CaroGameApplication;
 import com.framgia.carogame.R;
 import com.framgia.carogame.databinding.MenuGameActivityBinding;
@@ -89,7 +90,10 @@ public class MenuGame extends AppCompatActivity {
                     }
                 });
         snackBar.show();
-        checkBluetooth = (CheckBox) this.findViewById(R.id.bluetooth_check);
+        findDevices = (Button) findViewById(R.id.find_devices);
+        createGame = (Button) findViewById(R.id.create_game);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        checkBluetooth = (CheckBox) findViewById(R.id.bluetooth_check);
         checkBluetooth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -103,8 +107,6 @@ public class MenuGame extends AppCompatActivity {
                 BluetoothConnection.getInstance().disable();
             }
         });
-        findDevices = (Button) findViewById(R.id.find_devices);
-        createGame = (Button) findViewById(R.id.create_game);
     }
 
     @Override

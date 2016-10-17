@@ -45,14 +45,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <TextView
-            android:id="@+id/vs"
-            style="@style/WrapContentStyle"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="@dimen/vs_top_margin"
-            android:text="@string/vs"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-        <TextView
             android:id="@+id/player_score"
             style="@style/WrapContentStyle"
             android:layout_gravity="left|top"
@@ -84,12 +76,12 @@
             android:scaleY="0.5"/>
 
         <Button
-            android:id="@+id/surrender"
+            android:id="@+id/share"
             style="@style/WrapContentStyle"
             android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="@dimen/surrender_button_top_margin"
-            android:onClick="surrender"
-            android:text="@string/surrender"/>
+            android:layout_marginTop="@dimen/share_button_top_margin"
+            android:onClick="onShareFacebook"
+            android:text="@string/share"/>
 
         <Button
             android:id="@+id/quit"
@@ -98,6 +90,16 @@
             android:layout_marginTop="@dimen/quit_button_top_margin"
             android:onClick="leave"
             android:text="@string/quit"/>
+
+        <Button
+            style="@style/WrapContentStyle"
+            android:id="@+id/surrender"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="@dimen/surrender_button_top_margin"
+            android:onClick="surrender"
+            android:text="@string/surrender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </FrameLayout>
 </layout>

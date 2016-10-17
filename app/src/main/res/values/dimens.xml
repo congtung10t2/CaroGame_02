@@ -23,5 +23,7 @@
     <dimen name="bluetooth_option_top_margin">93dp</dimen>
     <dimen name="surrender_button_top_margin">75dp</dimen>
     <dimen name="quit_button_top_margin">135dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="share_button_top_margin">15dp</dimen>
 
 </resources>

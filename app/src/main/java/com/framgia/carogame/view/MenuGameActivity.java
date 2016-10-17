@@ -23,7 +23,7 @@ import com.framgia.carogame.model.constants.ServicesDef;
 import com.framgia.carogame.viewmodel.PlayerStorageViewModel;
 import com.framgia.carogame.viewmodel.services.BluetoothConnection;
 
-public class MenuGame extends AppCompatActivity {
+public class MenuGameActivity extends AppCompatActivity {
     private MenuGameActivityBinding binding;
     private PlayerStorageViewModel playerStorageViewModel;
     private CheckBox checkBluetooth;
@@ -129,13 +129,13 @@ public class MenuGame extends AppCompatActivity {
 
     public void findDevices(View view) {
         BluetoothConnection.getInstance().setReconnecting(false);
-        startActivity(new Intent(this, DeviceList.class));
+        startActivity(new Intent(this, DeviceListActivity.class));
     }
 
     public void startGame(View view) {
         BluetoothConnection.getInstance().setReconnecting(false);
         BluetoothConnection.getInstance().startServer();
-        ProgressDialog pd = ProgressDialogUtils.show(MenuGame.this, R.string.loading,
+        ProgressDialog pd = ProgressDialogUtils.show(MenuGameActivity.this, R.string.loading,
             R.string.please_wait);
         BluetoothConnection.getInstance().setProgressDialog(pd);
     }

@@ -17,7 +17,7 @@ import com.framgia.carogame.viewmodel.services.BluetoothConnection;
 
 public class GameView extends View implements OnGameCallback {
     private Paint paint = new Paint();
-    private CaroGame caroGame;
+    private CaroGameActivity caroGame;
     private Canvas canvas;
     private final float SIDE = 20.0f;
     private final float OFFSET_X = 0.5f;
@@ -142,7 +142,7 @@ public class GameView extends View implements OnGameCallback {
         }
     }
 
-    public void setGameContext(CaroGame caroGame) {
+    public void setGameContext(CaroGameActivity caroGame) {
         this.caroGame = caroGame;
     }
 

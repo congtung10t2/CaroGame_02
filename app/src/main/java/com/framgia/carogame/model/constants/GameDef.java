@@ -9,4 +9,6 @@ public class GameDef {
     public static final int MAX_HEIGHT = 10;
     public static final int WIN_TICK = 5;
     public static final int FLOAT_TO_PERCENT = 100;
+    public static final int SHORT_NAME = 5;
+    public static final int FULL_NAME_VALID = 8;
 }

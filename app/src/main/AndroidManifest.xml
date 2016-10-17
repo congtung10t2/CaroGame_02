@@ -29,9 +29,9 @@
             android:authorities="com.facebook.app.FacebookContentProvider741654635923028"
             android:exported="true"/>
 
-        <activity android:name=".view.CaroGame">
+        <activity android:name=".view.CaroGameActivity">
         </activity>
-        <activity android:name=".view.MenuGame">
+        <activity android:name=".view.MenuGameActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.DeviceList"
+            android:name=".view.DeviceListActivity"
             android:theme="@android:style/Theme.Dialog"/>
     </application>
 

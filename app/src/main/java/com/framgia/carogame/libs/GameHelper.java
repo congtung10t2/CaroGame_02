@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
+import com.framgia.carogame.model.constants.GameDef;
 import com.framgia.carogame.viewmodel.services.ThreadCancel;
 
 /**
@@ -27,20 +28,20 @@ public class GameHelper {
     }
 
     public static void stopThread(ThreadCancel thread) {
-        if(thread == null) return;
+        if (thread == null) return;
         thread.cancel();
     }
 
     public static Bitmap takeScreenShot(View view) {
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),
             Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
         return bitmap;
     }
 
-    public static SharePhotoContent shareImage(View view){
+    public static SharePhotoContent shareImage(View view) {
         Bitmap image = GameHelper.takeScreenShot(view);
         SharePhoto photo = new SharePhoto.Builder()
             .setBitmap(image)
@@ -51,7 +52,12 @@ public class GameHelper {
         return content;
     }
 
-    public static boolean isValidInRange(int val, int min, int max){
+    public static boolean isValidInRange(int val, int min, int max) {
         return val >= min && val <= max;
+    }
+
+    public static String getShortName(String fullName) {
+        return fullName.length() < GameDef.FULL_NAME_VALID ? fullName
+            : fullName.substring(0, GameDef.SHORT_NAME) + "...";
     }
 }

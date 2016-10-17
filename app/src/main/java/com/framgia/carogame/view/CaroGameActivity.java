@@ -30,7 +30,7 @@ import com.framgia.carogame.viewmodel.games.OnNextTurn;
 import com.framgia.carogame.viewmodel.games.OnResult;
 import com.framgia.carogame.viewmodel.services.BluetoothConnection;
 
-public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult {
+public class CaroGameActivity extends AppCompatActivity implements OnNextTurn, OnResult {
     public ProgressBar thinkingBar;
     private GameView gameView;
     private PlayerInfoViewModel players;
@@ -70,6 +70,12 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
 
     public void initGame() {
         players = new PlayerInfoViewModel(this);
+        String shortPlayerName = GameHelper.getShortName(BluetoothConnection.getInstance()
+            .getBluetoothAdapter().getName());
+        String shortEnemyName= GameHelper.getShortName(BluetoothConnection.getInstance()
+            .getEnemyDeviceName());
+        players.getPlayerInfo().setDisplayName(shortPlayerName);
+        players.getEnemyInfo().setDisplayName(shortEnemyName);
     }
 
     public void onPlayerTurn() {
@@ -108,7 +114,8 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
             .setNegativeButton(android.R.string.no, null).show();
     }
 
-    public void leave(View view) {
+    @Override
+    public void onBackPressed() {
         new AlertDialog.Builder(this)
             .setTitle(R.string.leave_title)
             .setMessage(R.string.ays_msg)
@@ -118,7 +125,7 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
                     BluetoothConnection.getInstance().writes(Commands.LEAVE.name());
                     saveCurrentProcess();
                     BluetoothConnection.getInstance().stopAllConnect();
-                    CaroGame.this.finish();
+                    finish();
                 }
             }).setNegativeButton(android.R.string.no, null).show();
     }
@@ -135,23 +142,23 @@ public class CaroGame extends AppCompatActivity implements OnNextTurn, OnResult 
         shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
             @Override
             public void onSuccess(Sharer.Result result) {
-                ToastUtils.showToast(R.string.share_success, CaroGame.this);
+                ToastUtils.showToast(R.string.share_success, CaroGameActivity.this);
             }
 
             @Override
             public void onCancel() {
-                ToastUtils.showToast(R.string.share_cancelled, CaroGame.this);
+                ToastUtils.showToast(R.string.share_cancelled, CaroGameActivity.this);
             }
 
             @Override
             public void onError(FacebookException exception) {
-                ToastUtils.showToast(R.string.share_error, CaroGame.this);
+                ToastUtils.showToast(R.string.share_error, CaroGameActivity.this);
             }
         });
         if (ShareDialog.canShow(SharePhotoContent.class)) {
             shareDialog.show(content);
         } else {
-            ToastUtils.showToast(R.string.cannot_share, CaroGame.this);
+            ToastUtils.showToast(R.string.cannot_share, CaroGameActivity.this);
         }
     }
 

@@ -15,7 +15,7 @@ import com.framgia.carogame.viewmodel.services.BluetoothConnection;
 
 import java.util.ArrayList;
 
-public class DeviceList extends Activity {
+public class DeviceListActivity extends Activity {
     private ArrayAdapter<String> adapterDevices;
     private ListView listDevices;
 
@@ -38,7 +38,7 @@ public class DeviceList extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ProgressDialog pd = ProgressDialogUtils.show(DeviceList.this, getString(R
+                        ProgressDialog pd = ProgressDialogUtils.show(DeviceListActivity.this, getString(R
                             .string.loading), getString(R.string.loading_date));
                         BluetoothConnection.getInstance().setProgressDialog(pd);
                     }

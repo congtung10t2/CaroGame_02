@@ -20,7 +20,7 @@ import com.framgia.carogame.libs.ProgressDialogUtils;
 import com.framgia.carogame.libs.ToastUtils;
 import com.framgia.carogame.model.constants.ServicesDef;
 import com.framgia.carogame.model.enums.MessageTypes;
-import com.framgia.carogame.view.CaroGame;
+import com.framgia.carogame.view.CaroGameActivity;
 import com.framgia.carogame.viewmodel.games.OnGameCallback;
 import com.framgia.carogame.viewmodel.states.ConnectionState;
 import com.framgia.carogame.viewmodel.states.StateListener;
@@ -290,7 +290,7 @@ public class BluetoothConnection implements StateListener {
         msg.setData(bundle);
         handler.sendMessage(msg);
         if(!reconnecting)
-        mainContext.startActivity(new Intent(mainContext, CaroGame.class));
+        mainContext.startActivity(new Intent(mainContext, CaroGameActivity.class));
         ConnectionState.getInstance().setState(ConnectionState.State.STATE_CONNECTED);
     }
 

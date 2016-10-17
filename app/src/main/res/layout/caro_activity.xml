@@ -84,14 +84,6 @@
             android:text="@string/share"/>
 
         <Button
-            android:id="@+id/quit"
-            style="@style/WrapContentStyle"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="@dimen/quit_button_top_margin"
-            android:onClick="leave"
-            android:text="@string/quit"/>
-
-        <Button
             style="@style/WrapContentStyle"
             android:id="@+id/surrender"
             android:layout_gravity="center_horizontal|top"

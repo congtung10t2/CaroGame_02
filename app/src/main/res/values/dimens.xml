@@ -1,0 +1,25 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="game_view_bottom_margin">40dp</dimen>
+    <dimen name="game_view_left_margin">20dp</dimen>
+    <dimen name="game_view_right_margin">20dp</dimen>
+    <dimen name="player_name_top_margin">40dp</dimen>
+    <dimen name="player_name_left_margin">25dp</dimen>
+    <dimen name="enemy_name_right_margin">25dp</dimen>
+    <dimen name="enemy_name_top_margin">40dp</dimen>
+    <dimen name="vs_top_margin">40dp</dimen>
+    <dimen name="player_score_top_margin">80dp</dimen>
+    <dimen name="player_score_left_margin">50dp</dimen>
+    <dimen name="enemy_score_top_margin">80dp</dimen>
+    <dimen name="enemy_score_right_margin">50dp</dimen>
+    <dimen name="thinking_bar_top_margin">93dp</dimen>
+    <dimen name="thinking_bar_horizontal_margin">16dp</dimen>
+    <dimen name="table_padding">5dip</dimen>
+    <dimen name="device_name_top_margin">28dp</dimen>
+    <dimen name="table_result_top_margin">48dp</dimen>
+    <dimen name="find_device_top_margin">39dp</dimen>
+    <dimen name="bluetooth_option_top_margin">93dp</dimen>
+
+</resources>

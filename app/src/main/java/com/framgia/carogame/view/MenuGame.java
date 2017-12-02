@@ -1,5 +1,6 @@
 package com.framgia.carogame.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,10 +12,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.facebook.FacebookSdk;
+import com.framgia.carogame.CaroGameApplication;
 import com.framgia.carogame.R;
 import com.framgia.carogame.databinding.MenuGameActivityBinding;
 import com.framgia.carogame.libs.GameHelper;
-import com.framgia.carogame.libs.ProgressBarUtils;
+import com.framgia.carogame.libs.ProgressDialogUtils;
 import com.framgia.carogame.libs.ToastUtils;
 import com.framgia.carogame.model.constants.ServicesDef;
 import com.framgia.carogame.viewmodel.PlayerStorageViewModel;
@@ -28,10 +31,27 @@ public class MenuGame extends AppCompatActivity {
     private Button createGame;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         initView();
         initBluetooth();
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        binding.invalidateAll();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        CaroGameApplication.getInstance().connectGps();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        CaroGameApplication.getInstance().disconnectGps();
     }
 
     public void initBluetooth() {
@@ -57,6 +77,7 @@ public class MenuGame extends AppCompatActivity {
     public void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.menu_game_activity);
         playerStorageViewModel = new PlayerStorageViewModel();
+        playerStorageViewModel.setPlayerFromStorage();
         binding.setPlayerStorage(playerStorageViewModel);
         Snackbar snackBar = Snackbar.make(binding.getRoot(), GameHelper.getDeviceName(), Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.dissmiss, new View.OnClickListener() {
@@ -69,7 +90,10 @@ public class MenuGame extends AppCompatActivity {
                     }
                 });
         snackBar.show();
-        checkBluetooth = (CheckBox) this.findViewById(R.id.bluetooth_check);
+        findDevices = (Button) findViewById(R.id.find_devices);
+        createGame = (Button) findViewById(R.id.create_game);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        checkBluetooth = (CheckBox) findViewById(R.id.bluetooth_check);
         checkBluetooth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -83,8 +107,6 @@ public class MenuGame extends AppCompatActivity {
                 BluetoothConnection.getInstance().disable();
             }
         });
-        findDevices = (Button) findViewById(R.id.find_devices);
-        createGame = (Button) findViewById(R.id.create_game);
     }
 
     @Override
@@ -106,11 +128,15 @@ public class MenuGame extends AppCompatActivity {
     }
 
     public void findDevices(View view) {
+        BluetoothConnection.getInstance().setReconnecting(false);
         startActivity(new Intent(this, DeviceList.class));
     }
 
     public void startGame(View view) {
-        BluetoothConnection.getInstance().StartServer();
-        ProgressBarUtils.showPB(MenuGame.this, R.string.loading, R.string.please_wait);
+        BluetoothConnection.getInstance().setReconnecting(false);
+        BluetoothConnection.getInstance().startServer();
+        ProgressDialog pd = ProgressDialogUtils.show(MenuGame.this, R.string.loading,
+            R.string.please_wait);
+        BluetoothConnection.getInstance().setProgressDialog(pd);
     }
 }

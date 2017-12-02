@@ -8,9 +8,14 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.framgia.carogame.libs.GameHelper;
+import com.framgia.carogame.libs.LogUtils;
 import com.framgia.carogame.model.constants.GameDef;
+import com.framgia.carogame.model.enums.Commands;
+import com.framgia.carogame.viewmodel.games.OnGameCallback;
+import com.framgia.carogame.viewmodel.services.BluetoothConnection;
 
-public class GameView extends View {
+public class GameView extends View implements OnGameCallback {
     private Paint paint = new Paint();
     private CaroGame caroGame;
     private Canvas canvas;
@@ -32,6 +37,49 @@ public class GameView extends View {
         init();
     }
 
+    private void playerWin(){
+        caroGame.onWin();
+        resetGame();
+    }
+
+    public void enemyWin(){
+        caroGame.onLost();
+        resetGame();
+    }
+
+    public void onMessage(String msg){
+        String[] response = msg.split(" ");
+        switch (Commands.valueOf(response[0])){
+            case SURRENDER:
+                playerWin();
+                break;
+            case WIN:
+                enemyWin();
+                break;
+            case LEAVE:
+                caroGame.saveCurrentProcess();
+                caroGame.finish();
+                break;
+            case TICK:
+                int indexX = Integer.parseInt(response[1]);
+                int indexY = Integer.parseInt(response[2]);
+                if(!isValidInput(indexX, indexY)) return;
+                ticks[indexX][indexY] = currentTick;
+                if(isWin(indexX, indexY, currentTick)) enemyWin();
+                playerTurn();
+                break;
+            default:
+                LogUtils.logD("Invalid message");
+                break;
+
+        }
+    }
+
+    public boolean isValidInput(int indexX, int indexY){
+        return GameHelper.isValidInRange(indexX, 0, GameDef.MAX_WIDTH-1) &&
+            GameHelper.isValidInRange(indexY, 0, GameDef.MAX_HEIGHT-1);
+    }
+
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -40,6 +88,16 @@ public class GameView extends View {
     private void init() {
         paint.setColor(Color.BLACK);
         resetGame();
+    }
+
+    public void enemyTurn(){
+        currentTick = TickType.CIRCLE;
+        caroGame.onEnemyTurn();
+    }
+
+    public void playerTurn(){
+        currentTick = TickType.SQUARED;
+        caroGame.onPlayerTurn();
     }
 
     public void resetGame() {
@@ -96,23 +154,18 @@ public class GameView extends View {
                 break;
             case (MotionEvent.ACTION_UP): {
                 postInvalidate();
+                caroGame.showProgressBar();
+                if(currentTick == TickType.CIRCLE) return false;
                 float touchX = event.getX();
                 float touchY = event.getY();
                 int indexX = getIndexX(touchX);
                 int indexY = getIndexY(touchY);
-                caroGame.showProgressBar();
-                if (indexX < 0 || indexX > GameDef.MAX_WIDTH) return false;
-                if (indexY < 0 || indexY > GameDef.MAX_HEIGHT) return false;
-                if (ticks[indexX][indexY] == TickType.INVALID) {
-                    ticks[indexX][indexY] = currentTick;
-                    if (currentTick == TickType.SQUARED) {
-                        caroGame.onEnemyTurn();
-                        currentTick = TickType.CIRCLE;
-                    } else {
-                        currentTick = TickType.SQUARED;
-                        caroGame.onPlayerTurn();
-                    }
-                }
+                if(!isValidInput(indexX, indexY)) return false;
+                if (ticks[indexX][indexY] != TickType.INVALID) return false;
+                ticks[indexX][indexY] = currentTick;
+                BluetoothConnection.getInstance().writes("TICK " + indexX + " " +indexY);
+                if(isWin(indexX, indexY, currentTick)) playerWin();
+                enemyTurn();
             }
             break;
         }
@@ -128,7 +181,7 @@ public class GameView extends View {
     int countOnDirection(int indexX, int indexY, TickType value, int stepX, int stepY) {
         int sum = 0;
         for (int k = 1; k < GameDef.WIN_TICK; k++) {
-            if (isLimit(indexX + k * stepX, indexY + k * stepY)) return sum;
+            if (!isLimit(indexX + k * stepX, indexY + k * stepY)) return sum;
             if (ticks[indexX + k * stepX][indexY + k * stepY] == value) sum++;
             else return sum;
         }
@@ -137,11 +190,11 @@ public class GameView extends View {
 
     boolean isWin(int indexX, int indexY, TickType value) {
         if (countOnDirection(indexX, indexY, value, 0, 1) + countOnDirection(indexX, indexY,
-            value, 0, -1) == GameDef.WIN_TICK - 1) return true;
+            value, 0, -1) >= GameDef.WIN_TICK - 1) return true;
         if (countOnDirection(indexX, indexY, value, 1, 0) + countOnDirection(indexX, indexY,
-            value, -1, 0) == GameDef.WIN_TICK - 1) return true;
+            value, -1, 0) >= GameDef.WIN_TICK - 1) return true;
         if (countOnDirection(indexX, indexY, value, 1, 1) + countOnDirection(indexX, indexY,
-            value, -1, -1) == GameDef.WIN_TICK - 1) return true;
+            value, -1, -1) >= GameDef.WIN_TICK - 1) return true;
         return false;
     }
 

@@ -1,7 +1,12 @@
 package com.framgia.carogame.libs;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Build;
+import android.view.View;
 
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
 import com.framgia.carogame.viewmodel.services.ThreadCancel;
 
 /**
@@ -25,5 +30,28 @@ public class GameHelper {
         if(thread == null) return;
         thread.cancel();
     }
-    
+
+    public static Bitmap takeScreenShot(View view) {
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+            Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    public static SharePhotoContent shareImage(View view){
+        Bitmap image = GameHelper.takeScreenShot(view);
+        SharePhoto photo = new SharePhoto.Builder()
+            .setBitmap(image)
+            .build();
+        SharePhotoContent content = new SharePhotoContent.Builder()
+            .addPhoto(photo)
+            .build();
+        return content;
+    }
+
+    public static boolean isValidInRange(int val, int min, int max){
+        return val >= min && val <= max;
+    }
 }

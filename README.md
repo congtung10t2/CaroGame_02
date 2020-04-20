@@ -1,2 +1,2 @@
 # CaroGame_02
-Caro Game (Training)
+Demo Android application using canvas to create demo game 
